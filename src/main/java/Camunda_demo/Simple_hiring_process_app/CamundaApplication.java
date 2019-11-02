@@ -1,0 +1,13 @@
+package Camunda_demo.Simple_hiring_process_app;
+
+import org.camunda.bpm.spring.boot.starter.annotation.EnableProcessApplication;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+@EnableProcessApplication("Simple-hiring-process-app")
+public class CamundaApplication {
+	public static void main(String... args) {
+		SpringApplication.run(CamundaApplication.class, args);
+	}
+}
