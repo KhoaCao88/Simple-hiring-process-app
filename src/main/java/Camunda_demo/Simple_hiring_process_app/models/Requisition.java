@@ -17,7 +17,7 @@ public class Requisition implements Serializable {
 	private Date date;
 	private String department;
 	private String location;
-	private String empNum;
+	private Integer empNum;
 	private String gmApproval;
 	private String gmComments;
 	private String instanceId;
@@ -63,10 +63,10 @@ public class Requisition implements Serializable {
 	public void setLocation(String location) {
 		this.location = location;
 	}
-	public String getEmpNum() {
+	public Integer getEmpNum() {
 		return empNum;
 	}
-	public void setEmpNum(String empNum) {
+	public void setEmpNum(Integer empNum) {
 		this.empNum = empNum;
 	}
 	public String getGmApproval() {

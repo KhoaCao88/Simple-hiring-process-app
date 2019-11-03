@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.springframework.stereotype.Component;
 
-@Component("PositionDetails")
+@Component("Position")
 public class Position implements Serializable {
 
 	private static final long serialVersionUID = 4580085259982608206L;
@@ -13,7 +13,7 @@ public class Position implements Serializable {
 	private Person replacement;
 	private String jobTitle;
 	private String ild;
-	private Qualifications qualifications;
+	
 	public String getPositionType() {
 		return positionType;
 	}
@@ -38,12 +38,4 @@ public class Position implements Serializable {
 	public void setIld(String ild) {
 		this.ild = ild;
 	}
-	public Qualifications getQualifications() {
-		return qualifications;
-	}
-	public void setQualifications(Qualifications qualifications) {
-		this.qualifications = qualifications;
-	}
-	
-	
 }

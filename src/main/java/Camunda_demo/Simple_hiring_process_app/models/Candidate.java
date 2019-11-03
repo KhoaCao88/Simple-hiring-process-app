@@ -11,7 +11,7 @@ public class Candidate implements Serializable {
 	private static final long serialVersionUID = 8778858715851778663L;
 
 	private String name;
-	private Qualifications qualifications;
+	private Qualification qualification;
 	
 	
 	public String getName() {
@@ -20,11 +20,11 @@ public class Candidate implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Qualifications getQualifications() {
-		return qualifications;
+	public Qualification getQualification() {
+		return qualification;
 	}
-	public void setQualifications(Qualifications qualifications) {
-		this.qualifications = qualifications;
+	public void setQualification(Qualification qualification) {
+		this.qualification = qualification;
 	}
 	
 	
