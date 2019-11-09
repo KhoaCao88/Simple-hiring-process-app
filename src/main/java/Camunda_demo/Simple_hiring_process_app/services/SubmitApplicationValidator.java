@@ -2,10 +2,12 @@ package Camunda_demo.Simple_hiring_process_app.services;
 
 import org.camunda.bpm.engine.impl.form.validator.FormFieldValidator;
 import org.camunda.bpm.engine.impl.form.validator.FormFieldValidatorContext;
+import org.camunda.bpm.engine.variable.Variables;
 import org.camunda.bpm.engine.variable.value.ObjectValue;
 
 import Camunda_demo.Simple_hiring_process_app.models.Requisition;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -15,15 +17,27 @@ public class SubmitApplicationValidator implements FormFieldValidator {
 
     @Override
     public boolean validate(Object submittedValue, FormFieldValidatorContext validatorContext) {
-        LOGGER.info("test validator");
-        System.out.println("test validator 123");
-        // get access to all form fields submitted in the form submit
-        Map<String,Object> completeSubmit = validatorContext.getSubmittedValues();
-        Requisition requisition = (Requisition)((ObjectValue)completeSubmit.get("requisition")).getValue();
-        LOGGER.info("submitted variables: " + completeSubmit);
-        LOGGER.info("requisition: " + requisition.toString());
-        return false;
-    }
+        // LOGGER.info("test validator");
+        // LOGGER.info("Submitted values: " + submittedValue);
+        // // get access to all form fields submitted in the form submit
+        // Map<String,Object> completeSubmit = validatorContext.getSubmittedValues();
+        // Iterator<Object> it = (Iterator<Object>) completeSubmit.values();
+        // while(it.hasNext()){
+        //     ObjectValue o = Variables.serializedObjectValue(it.next().toString())
+        //             .serializationDataFormat(Variables.SerializationDataFormats.JAVA)
+        //             .objectTypeName("com.example.Order")
+        //             .create();
+        // }
+        
+// LOGGER.info("requisition: " + completeSubmit.get("qualification"));
+        // Variables.serializedObjectValue(completeSubmit.get("requisition").toString())
+        //         .serializationDataFormat(Variables.SerializationDataFormats.JAVA)
+        //         .objectTypeName("com.example.Order")
+        //         .create();
 
-    
-} 
+        // Requisition requisition = (Requisition)((ObjectValue)completeSubmit.get("requisition")).getValue();
+        // LOGGER.info("submitted variables: " + completeSubmit);
+        // LOGGER.info("requisition: " + requisition.toString());
+        return true;
+    }
+}

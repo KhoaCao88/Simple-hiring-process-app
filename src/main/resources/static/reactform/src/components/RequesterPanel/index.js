@@ -1,37 +1,13 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Card, CardHeader, CardContent, TextField, MenuItem } from '@material-ui/core';
+import LookupDataService from '../../services/LookupDataService';
 
+const lookupDataService = new LookupDataService();
 
-const empTypes = [
-    {
-        value: 'fullTime',
-        label: 'Full time',
-    },
-    {
-        value: 'contract',
-        label: 'Contractor',
-    }
-];
+const empTypes = lookupDataService.fetchEmploymentType();
 
-const departments = [
-    {
-        value: 'IT',
-        label: 'IT',
-    },
-    {
-        value: 'HR',
-        label: 'HR',
-    },
-    {
-        value: 'sale',
-        label: 'Sale',
-    },
-    {
-        value: 'accounting',
-        label: 'Accounting',
-    },
-];
+const departments = lookupDataService.fetchDepartment();
 
 const useStyles = makeStyles(theme => ({
     menu: {
@@ -65,6 +41,7 @@ export default function RequesterPanel(props) {
                     value={props.requisition.requester}
                     onChange={props.handleRequesterChange}
                     margin="normal"
+                    disabled={props.disabled}
                 />
 
                 <TextField
@@ -80,6 +57,7 @@ export default function RequesterPanel(props) {
                         },
                     }}
                     margin="normal"
+                    disabled={props.disabled}
                 >
                     {empTypes.map(option => (
                         <MenuItem key={option.value} value={option.value}>
@@ -101,6 +79,7 @@ export default function RequesterPanel(props) {
                         },
                     }}
                     margin="normal"
+                    disabled={props.disabled}
                 >
                     {departments.map(option => (
                         <MenuItem key={option.value} value={option.value}>
@@ -120,6 +99,7 @@ export default function RequesterPanel(props) {
                         shrink: true,
                     }}
                     margin="normal"
+                    disabled={props.disabled}
                 />
 
             </CardContent>

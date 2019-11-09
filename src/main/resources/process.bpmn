@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.4.1">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="1.16.2">
   <bpmn:collaboration id="simple_hiring">
     <bpmn:extensionElements>
       <camunda:properties>
         <camunda:property name="isNewPosition" value="true" />
+        <camunda:property name="referenceNo" />
+        <camunda:property name="isApproved" value="true" />
+        <camunda:property name="requisition" />
+        <camunda:property name="position" />
+        <camunda:property name="qualification" />
       </camunda:properties>
     </bpmn:extensionElements>
     <bpmn:participant id="simple_hiring_process" name="Simple Hiring Process" processRef="Simple-hiring-process-app" />
@@ -26,8 +31,9 @@
       </bpmn:lane>
       <bpmn:lane id="hiring_manager" name="HIring Manager">
         <bpmn:flowNodeRef>submit_new_application</bpmn:flowNodeRef>
-        <bpmn:flowNodeRef>isNewPosition</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>StartEvent_19ovyws</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>isNewPosition</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_1ab79v8</bpmn:flowNodeRef>
       </bpmn:lane>
     </bpmn:laneSet>
     <bpmn:userTask id="submit_new_application" name="Submit position request2" camunda:formKey="/forms/submit-position-request.html" camunda:candidateGroups="HiringManager">
@@ -36,28 +42,34 @@
           <camunda:formField id="empNum" type="long">
             <camunda:validation>
               <camunda:constraint name="validator" config="Camunda_demo.Simple_hiring_process_app.services.SubmitApplicationValidator" />
-              <camunda:constraint name="required" />
             </camunda:validation>
           </camunda:formField>
         </camunda:formData>
         <camunda:taskListener class="Camunda_demo.Simple_hiring_process_app.services.SubmitApplicationAssignmentListener" event="assignment" />
+        <camunda:inputOutput>
+          <camunda:inputParameter name="referenceNo">${referenceNo}</camunda:inputParameter>
+          <camunda:outputParameter name="isNew">${position.positionType}</camunda:outputParameter>
+        </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_13r91mo</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_12i5wqn</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:exclusiveGateway id="isNewPosition" name="Is new position?">
-      <bpmn:incoming>SequenceFlow_12i5wqn</bpmn:incoming>
-      <bpmn:outgoing>SequenceFlow_0iyy4o6</bpmn:outgoing>
-      <bpmn:outgoing>SequenceFlow_08csnn6</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:userTask id="review_new_position_request" name="Review new position request" camunda:formKey="embedded:/forms/review-position-request.html" camunda:candidateGroups="GeneralManager">
+    <bpmn:userTask id="review_new_position_request" name="Review new position request" camunda:formKey="/forms/review-position-request.html" camunda:candidateGroups="GeneralManager">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:outputParameter name="gmApproval">${requisition.gmApproval}</camunda:outputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
       <bpmn:incoming>SequenceFlow_08csnn6</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1q718z1</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:startEvent id="StartEvent_19ovyws" name="Start">
+      <bpmn:extensionElements>
+        <camunda:executionListener class="Camunda_demo.Simple_hiring_process_app.services.StartProcessListener" event="start" />
+      </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_13r91mo</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:userTask id="Task_1okrmll" name="Find candidates" camunda:formKey="embedded:/forms/find-candidates.html" camunda:candidateGroups="HumanResource">
+    <bpmn:userTask id="Task_1okrmll" name="Find candidates" camunda:formKey="/forms/find-candidates.html" camunda:candidateGroups="HumanResource">
       <bpmn:incoming>SequenceFlow_0iyy4o6</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_0z338qk</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1lwviup</bpmn:outgoing>
@@ -93,20 +105,31 @@
     <bpmn:sequenceFlow id="SequenceFlow_0lxjd12" sourceRef="notifying-hiring-manager" targetRef="EndEvent_1kafjsg" />
     <bpmn:sequenceFlow id="SequenceFlow_1lwviup" sourceRef="Task_1okrmll" targetRef="EndEvent_1kafjsg" />
     <bpmn:sequenceFlow id="SequenceFlow_1byh8t6" sourceRef="isGMApproved" targetRef="notifying-hiring-manager">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{not isApproved}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${gmApproval == "R"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0z338qk" sourceRef="isGMApproved" targetRef="Task_1okrmll">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{isApproved}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${gmApproval == "A"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_1q718z1" sourceRef="review_new_position_request" targetRef="isGMApproved" />
     <bpmn:sequenceFlow id="SequenceFlow_08csnn6" sourceRef="isNewPosition" targetRef="review_new_position_request">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{isNewPosition}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isNew == "n"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0iyy4o6" sourceRef="isNewPosition" targetRef="Task_1okrmll">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{not isNewPosition}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isNew == "e"}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="SequenceFlow_12i5wqn" sourceRef="submit_new_application" targetRef="isNewPosition" />
+    <bpmn:sequenceFlow id="SequenceFlow_12i5wqn" sourceRef="submit_new_application" targetRef="Task_1ab79v8" />
     <bpmn:sequenceFlow id="SequenceFlow_13r91mo" sourceRef="StartEvent_19ovyws" targetRef="submit_new_application" />
+    <bpmn:exclusiveGateway id="isNewPosition" name="Is new position?">
+      <bpmn:incoming>SequenceFlow_0zgtxu1</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0iyy4o6</bpmn:outgoing>
+      <bpmn:outgoing>SequenceFlow_08csnn6</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="SequenceFlow_0zgtxu1" sourceRef="Task_1ab79v8" targetRef="isNewPosition" />
+    <bpmn:scriptTask id="Task_1ab79v8" name="Log" scriptFormat="groovy">
+      <bpmn:incoming>SequenceFlow_12i5wqn</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_0zgtxu1</bpmn:outgoing>
+      <bpmn:script>System.out.println("isNew: " + isNew);</bpmn:script>
+    </bpmn:scriptTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="simple_hiring">
@@ -133,24 +156,25 @@
         <dc:Bounds x="185" y="224" width="1029" height="197" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ExclusiveGateway_0ueq5z8_di" bpmnElement="isNewPosition" isMarkerVisible="true">
-        <dc:Bounds x="441" y="83" width="50" height="50" />
+        <dc:Bounds x="589" y="83" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="430" y="140" width="79" height="14" />
+          <dc:Bounds x="574" y="59" width="79" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="SequenceFlow_12i5wqn_di" bpmnElement="SequenceFlow_12i5wqn">
         <di:waypoint x="391" y="108" />
-        <di:waypoint x="441" y="108" />
+        <di:waypoint x="423" y="108" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_0iyy4o6_di" bpmnElement="SequenceFlow_0iyy4o6">
-        <di:waypoint x="494" y="108" />
+        <di:waypoint x="639" y="108" />
         <di:waypoint x="998" y="108" />
         <di:waypoint x="998" y="465" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_08csnn6_di" bpmnElement="SequenceFlow_08csnn6">
-        <di:waypoint x="466" y="133" />
-        <di:waypoint x="466" y="310" />
-        <di:waypoint x="541" y="310" />
+        <di:waypoint x="614" y="133" />
+        <di:waypoint x="614" y="202" />
+        <di:waypoint x="591" y="202" />
+        <di:waypoint x="591" y="270" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="UserTask_0s1v85k_di" bpmnElement="review_new_position_request">
         <dc:Bounds x="541" y="270" width="100" height="80" />
@@ -218,6 +242,13 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="ServiceTask_1v76pd1_di" bpmnElement="notifying-hiring-manager">
         <dc:Bounds x="666" y="633" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_0zgtxu1_di" bpmnElement="SequenceFlow_0zgtxu1">
+        <di:waypoint x="523" y="108" />
+        <di:waypoint x="589" y="108" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ScriptTask_1h2y4uf_di" bpmnElement="Task_1ab79v8">
+        <dc:Bounds x="423" y="68" width="100" height="80" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

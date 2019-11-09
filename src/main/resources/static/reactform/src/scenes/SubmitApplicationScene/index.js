@@ -3,14 +3,11 @@ import React from 'react';
 import PositionPanel from '../../components/PositionPanel';
 import RequesterPanel from '../../components/RequesterPanel';
 import QualificationPanel from '../../components/QualificationPanel'
-import { ExpansionPanel, Typography, Grid, Button, ExpansionPanelSummary, ExpansionPanelDetails, Checkbox, FormControlLabel } from '@material-ui/core';
+import { ExpansionPanel, Typography, Grid, Button, ExpansionPanelSummary, ExpansionPanelDetails} from '@material-ui/core';
 import CheckIcon from '@material-ui/icons/Check';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 import { makeStyles } from '@material-ui/core/styles';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 
 const useStyles = makeStyles(theme => ({
@@ -37,7 +34,6 @@ function SubmitApplicationHook(props) {
 		<div>
 			<ExpansionPanel expanded>
 				<ExpansionPanelSummary
-					expandIcon={<ExpandMoreIcon />}
 					aria-controls="panel1a-content"
 					id="panel1a-header">
 				<Typography className={classes.heading}> Create Position Requisition </Typography>
@@ -47,23 +43,13 @@ function SubmitApplicationHook(props) {
                         <Grid item xs={12}>
 							<Typography className={classes.label}>Requisition Number: {props.requisition.reqNum}</Typography>
 						</Grid>
-						<Grid item xs={12}>
-						<FormControlLabel
-							control={
-								<Checkbox
-									checked={props.isNewPosition}
-									onChange={props.handleIsNewPositionClick}
-								/>
-							}
-							label="Is new position?"
-						/>
-						</Grid>
                         <Grid item xs={12} lg={6}>
                             <RequesterPanel requisition             	=   {props.requisition} 
                                             handleRequesterChange   	=   {props.handleRequesterChange}
                                             handleEmpTypeChange     	=   {props.handleEmpTypeChange}
                                             handleDepartmentChange  	=   {props.handleDepartmentChange}
                                             handleEmpNumChange      	=   {props.handleEmpNumChange} 
+											disabled={false}
 											/>
                         </Grid>
                         <Grid item xs={12} lg={6}>
@@ -73,6 +59,7 @@ function SubmitApplicationHook(props) {
                                             handleLocationChange    	=   {props.handleLocationChange}
                                             handlePositionChange    	=   {props.handlePositionChange}
                                             handleJobTitleChange    	=   {props.handleJobTitleChange} 
+											disabled={false}
 											/>
                         </Grid>
                         <Grid item xs={12}>
@@ -80,6 +67,7 @@ function SubmitApplicationHook(props) {
 												handleEducationSelect	=	{props.handleEducationSelect} 
 												handleSkillSelect		=	{props.handleSkillSelect}
 												handleExperienceSelect	=	{props.handleExperienceSelect}
+												disabled={false}
 											/>
                         </Grid>
                     </Grid>
@@ -129,7 +117,7 @@ export default class SubmitApplicationScene extends React.Component{
         this.state = {
             taskId: props.taskId,
 			isLoaded: false,
-			position: {value: { positionType: "" }},
+			position: {value: { positionType: "", replacement:{} }},
 			requisition: {value: { empType: "", department: "", location: "" }},
 			qualification: {value: {educations:[], skills:[], experience: ""}},
 			isNewPosition: false
@@ -150,14 +138,6 @@ export default class SubmitApplicationScene extends React.Component{
 		this.handleEducationSelect 		= 	this.handleEducationSelect.bind(this);
 		this.handleSkillSelect 			= 	this.handleSkillSelect.bind(this);
 		this.handleExperienceSelect		= 	this.handleExperienceSelect.bind(this);
-		this.handleIsNewPositionClick	= 	this.handleIsNewPositionClick.bind(this);
-	}
-	
-	handleIsNewPositionClick(event){
-		const checked = event.target.checked;
-		this.setState(
-			{isNewPosition: checked}	
-		)
 	}
 
 	handleEducationSelect(checked){
@@ -173,16 +153,19 @@ export default class SubmitApplicationScene extends React.Component{
 
 	handleSkillSelect(checked){
 		const qualification = this.state.qualification;
-		let skills = qualification.value.skills.slice();
-		skills = checked;
-		qualification.value.skills = skills;
+		qualification.value.skills = checked;
 		this.setState({
 			qualification: qualification
 		})
 	}
 
 	handleExperienceSelect(checked){
-
+		console.log("exp: ", checked);
+		const qualification = this.state.qualification;
+		qualification.value.experience = checked;
+		this.setState({
+			qualification: qualification
+		})
 	}
 
     handleEmpTypeChange(event) {
@@ -257,16 +240,20 @@ export default class SubmitApplicationScene extends React.Component{
 		console.log("requisition: ", this.state.requisition);
 		console.log("position: ", this.state.position);
 		console.log("qualification: ", this.state.qualification);
-		console.log("isNewPosition", this.state.isNewPosition)
+		const requisition = this.state.requisition;
+		const qualification = this.state.qualification;
+		const position = this.state.position;
+		requisition.value = JSON.stringify(requisition.value);
+		qualification.value = JSON.stringify(qualification.value);
+		position.value = JSON.stringify(position.value);
 
-		fetch(`${window.location.protocol + '//' + window.location.host}/rest/task/${this.state.taskId}/submit-form`, {
+		fetch(`${window.location.protocol + '//' + window.location.host}/rest/task/${this.state.taskId}/complete`, {
 			method: 'POST',
 			body: JSON.stringify({
 				"variables": {
-					"requisition": { "value": JSON.stringify(this.state.requisition), "type": "Object", "valueInfo": { "objectTypeName": "Camunda_demo.Simple_hiring_process_app.models.Requisition", "serializationDataFormat": "application/json" } },
-					"position": { "value": JSON.stringify(this.state.position), "type": "Object", "valueInfo": { "objectTypeName": "Camunda_demo.Simple_hiring_process_app.models.Position", "serializationDataFormat": "application/json" } },
-					"qualification": {"value": JSON.stringify(this.state.qualification), "type": "Object", "valueInfo": { "objectTypeName": "Camunda_demo.Simple_hiring_process_app.models.Qualification", "serializationDataFormat": "application/json"} },
-					"isNewPosition": this.state.isNewPosition
+					"requisition": requisition,
+					"position": position,
+					"qualification": qualification,
 				}
 			}),
 			headers: {
@@ -298,8 +285,7 @@ export default class SubmitApplicationScene extends React.Component{
 				"modifications": {
 					"requisition": requisition,
 					"position": position,
-					"qualification": qualification,
-					"isNewPosition":{ "value":this.state.isNewPosition, "type":"Boolean" }
+					"qualification": qualification
 				}
 			}),
 			headers: {
@@ -325,18 +311,15 @@ export default class SubmitApplicationScene extends React.Component{
 					console.log("result: ", result);
 					const requisition = result.requisition ? result.requisition : {value: { empType: "", department: "", location: "" }};
 					console.log("After parsing requisition: ", requisition);
-					const position = result.position ? result.position : {value:{ positionType: "" }};
+					const position = result.position ? result.position : {value:{ positionType: "", replacement: {} }};
 					console.log("After parsing position: ", position);
-					const qualification = result.qualification ? result.qualification : {value: {educations:[], skills:[], experience: ""}};
-					console.log("After parsing qualification: ", qualification);
-					const isNewPosition = result.isNewPosition;
+					const qualification = result.qualification ? result.qualification : {value: {educations:[], skills:[], experience: "l0"}};
 
 					this.setState({
 						isLoaded: true,
 						requisition: requisition,
 						position: position,
-						qualification: qualification,
-						isNewPosition: isNewPosition
+						qualification: qualification
 					});
 				},
 				(error) => {
@@ -356,7 +339,6 @@ export default class SubmitApplicationScene extends React.Component{
 					<SubmitApplicationHook  requisition				=	{this.state.requisition.value}
 											position				=	{this.state.position.value}
 											qualification			=	{this.state.qualification.value}
-											isNewPosition			=	{this.state.isNewPosition}
 
 											handleEmpTypeChange		=	{this.handleEmpTypeChange}
 											handleDepartmentChange	=	{this.handleDepartmentChange}

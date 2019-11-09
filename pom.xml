@@ -50,6 +50,12 @@
 
 	<dependencies>
 		<dependency>
+      		<groupId>org.codehaus.groovy</groupId>
+			<artifactId>groovy-all</artifactId>
+			<version>2.5.8</version>
+			<type>pom</type>
+    	</dependency>
+		<dependency>
 			<groupId>org.camunda.bpm.springboot</groupId>
 			<artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
 			<!-- Adjust if you want to use EE: <artifactId>camunda-bpm-spring-boot-starter-webapp-ee</artifactId> 
@@ -120,6 +126,11 @@
 			<id>camunda-bpm-nexus</id>
 			<name>Camunda Maven Repository</name>
 			<url>https://app.camunda.com/nexus/content/groups/public</url>
+		</repository>
+		<repository>
+			<id>groovy-all</id>
+			<name>Groovy repo</name>
+			<url>https://mvnrepository.com/artifact/org.codehaus.groovy/groovy-all</url>
 		</repository>
 		<!-- enable this for EE dependencies (requires credentials in ~/.m2/settings.xml) 
 			<repository> <id>camunda-bpm-nexus-ee</id> <name>Camunda Enterprise Maven 

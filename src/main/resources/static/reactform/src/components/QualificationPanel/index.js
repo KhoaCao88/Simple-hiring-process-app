@@ -2,6 +2,7 @@ import React from 'react';
 import { Paper, Tabs, Tab, Card, CardHeader, CardContent, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import MutipleSelectionList from '../MutipleSelectionList';
+import SingleSelectionList from '../SingleSelectionList';
 import LookupDataService from '../../services/LookupDataService';
 
 const useStyles = makeStyles(theme => ({
@@ -16,10 +17,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function TabPanel(props) {
-    const { children, value, index, ...other } = props;
+    const { children, value, index } = props;
     const classes = useStyles();
     return (
-        <Grid className={classes.tabPanelSection} container style={{display: (value != index)? "none": "" }}>
+        <Grid className={classes.tabPanelSection} container style={{display: (value !== index)? "none": "" }}>
             <Grid item>
                 {children}
             </Grid>
@@ -60,13 +61,13 @@ export default function QualificationPanel(props) {
                 </Paper>
 
                 <TabPanel value={value} index={0}>
-                    <MutipleSelectionList list={educations} selectedValues={props.qualification.educations} handleItemSelect={props.handleEducationSelect}/>
+                    <MutipleSelectionList disabled={props.disabled} list={educations} selectedValues={props.qualification.educations} handleItemSelect={props.handleEducationSelect}/>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <MutipleSelectionList list={skills} selectedValues={props.qualification.skills} handleItemSelect={props.handleSkillSelect}/>
+                    <MutipleSelectionList disabled={props.disabled} list={skills} selectedValues={props.qualification.skills} handleItemSelect={props.handleSkillSelect}/>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                    Radio box list here
+                    <SingleSelectionList disabled={props.disabled} list={experience} selectedValues={props.qualification.experience} handleItemSelect={props.handleExperienceSelect}/>
                 </TabPanel>
             </CardContent>
         </Card>

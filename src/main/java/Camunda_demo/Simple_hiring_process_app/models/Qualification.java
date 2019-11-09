@@ -13,12 +13,12 @@ public class Qualification implements Serializable {
 
 	private List<String> skills;
 	private List<String> educations;
-	private List<String> experience;
+	private String experience;
 
 	public Qualification(){
 		skills = new ArrayList<String>();
 		educations = new ArrayList<String>();
-		experience = new ArrayList<String>();
+		experience = "";
 	}
 	
 	public List<String> getSkills() {
@@ -33,10 +33,10 @@ public class Qualification implements Serializable {
 	public void setEducations(List<String> educations) {
 		this.educations = educations;
 	}
-	public List<String> getExperience() {
+	public String getExperience() {
 		return experience;
 	}
-	public void setExperience(List<String> experience) {
+	public void setExperience(String experience) {
 		this.experience = experience;
 	}
 	

@@ -21,6 +21,7 @@ public class Requisition implements Serializable {
 	private String gmApproval;
 	private String gmComments;
 	private String instanceId;
+
 	public String getReqNum() {
 		return reqNum;
 	}

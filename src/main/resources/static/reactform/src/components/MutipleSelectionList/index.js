@@ -20,13 +20,15 @@ const useStyles = makeStyles(theme => ({
 
 export default function MutipleSelectionList(props) {
     const classes = useStyles();
-    const [checked, setChecked] = React.useState(props.selectedValues);
-    const [list, setList] = React.useState(props.list)
+    // const [checked, setChecked] = React.useState(props.selectedValues);
+    const checked = props.selectedValues;
+    // const [list, setList] = React.useState(props.list)
+    const list = props.list;
 
     console.log("MutipleSelectionList props:", props, checked);
 
     const handleToggle = value => () => {
-        debugger
+
         const currentIndex = checked.indexOf(value);
         const newChecked = [...checked];
 
@@ -36,9 +38,9 @@ export default function MutipleSelectionList(props) {
             newChecked.splice(currentIndex, 1);
         }
 
-        setChecked(newChecked);
+        // setChecked(newChecked);
         if(props.handleItemSelect){
-            props.handleItemSelect(newChecked)
+            props.handleItemSelect(newChecked, props.otherInputs)
         }
     };
 
@@ -48,7 +50,7 @@ export default function MutipleSelectionList(props) {
                 const labelId = `checkbox-list-label-${item.value}`;
 
                 return (
-                    <ListItem key={item.value} role={undefined} dense button onClick={handleToggle(item.value)}>
+                    <ListItem disabled={props.disabled} key={item.value} role={undefined} dense button onClick={handleToggle(item.value)}>
                         <ListItemIcon>
                             <Checkbox
                                 edge="start"
