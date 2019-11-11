@@ -1,7 +1,6 @@
 package Camunda_demo.Simple_hiring_process_app;
 
 import org.apache.ibatis.logging.LogFactory;
-import org.camunda.bpm.engine.test.Deployment;
 import org.camunda.bpm.engine.test.ProcessEngineRule;
 import org.camunda.bpm.scenario.ProcessScenario;
 import org.camunda.bpm.spring.boot.starter.test.helper.StandaloneInMemoryTestConfiguration;
@@ -14,13 +13,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
-
-import static org.junit.Assert.*;
-import static org.assertj.core.api.Assertions.*;
-import static org.camunda.bpm.engine.test.assertions.ProcessEngineTests.*;
 
 /**
  * Test case starting an in-memory database-backed Process Engine.

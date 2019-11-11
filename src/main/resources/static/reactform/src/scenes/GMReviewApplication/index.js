@@ -8,6 +8,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { makeStyles } from '@material-ui/core/styles';
+import ActionButtonSection from '../../components/ActionButtonSection';
 
 const useStyle = makeStyles(theme => ({
 	button:{
@@ -54,36 +55,10 @@ function GMReviewApplicationHook(props){
 					</Grid>
 				</ExpansionPanelDetails>
 			</ExpansionPanel>
-			<Grid container justify="center">
-				<Grid item>
-					<Button
-						variant="contained"
-						color="primary"
-						className={classes.button}
-						onClick={props.handleSubmitClick}
-						startIcon={<CheckIcon></CheckIcon>}>
-						Submit
-					</Button>
-					<Button
-						variant="contained"
-						color="default"
-						className={classes.button}
-						startIcon={<SaveIcon></SaveIcon>}
-						onClick={props.handleSaveClick}
-					>
-						Save
-					</Button>
-					<Button
-						variant="contained"
-						color="default"
-						className={classes.button}
-						startIcon={<CancelIcon></CancelIcon>}
-						onClick={props.handleCancelClick}
-					>
-						Cancel
-					</Button>
-				</Grid>
-			</Grid>
+			<ActionButtonSection 	handleSubmitClick 	=	{props.handleSubmitClick}
+									handleSaveClick		=	{props.handleSaveClick}
+									handleCancelClick	=	{props.handleCancelClick}
+			/>
 		</div>
     );
 }

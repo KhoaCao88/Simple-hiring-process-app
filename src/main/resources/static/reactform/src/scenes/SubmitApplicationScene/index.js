@@ -4,10 +4,8 @@ import PositionPanel from '../../components/PositionPanel';
 import RequesterPanel from '../../components/RequesterPanel';
 import QualificationPanel from '../../components/QualificationPanel'
 import { ExpansionPanel, Typography, Grid, Button, ExpansionPanelSummary, ExpansionPanelDetails} from '@material-ui/core';
-import CheckIcon from '@material-ui/icons/Check';
-import SaveIcon from '@material-ui/icons/Save';
-import CancelIcon from '@material-ui/icons/Cancel';
 import { makeStyles } from '@material-ui/core/styles';
+import ActionButtonSection from '../../components/ActionButtonSection';
 
 
 const useStyles = makeStyles(theme => ({
@@ -74,36 +72,10 @@ function SubmitApplicationHook(props) {
 				</ExpansionPanelDetails>
 			</ExpansionPanel>
 
-			<Grid container justify="center">
-				<Grid item>
-					<Button
-						variant="contained"
-						color="primary"
-						className={classes.button}
-						onClick={props.handleSubmitClick}
-						startIcon={<CheckIcon></CheckIcon>}>
-						Submit
-					</Button>
-					<Button
-						variant="contained"
-						color="default"
-						className={classes.button}
-						startIcon={<SaveIcon></SaveIcon>}
-						onClick={props.handleSaveClick}
-					>
-						Save
-					</Button>
-					<Button
-						variant="contained"
-						color="default"
-						className={classes.button}
-						startIcon={<CancelIcon></CancelIcon>}
-						onClick={props.handleCancelClick}
-					>
-						Cancel
-					</Button>
-				</Grid>
-			</Grid>
+			<ActionButtonSection 	handleSubmitClick 	=	{props.handleSubmitClick}
+									handleSaveClick		=	{props.handleSaveClick}
+									handleCancelClick	=	{props.handleCancelClick}
+			/>
 		</div>
 	);
 }

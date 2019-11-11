@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardContent, ExpansionPanel, Grid, TextField, Table, TableHead, TableRow, TableBody, Button, TableCell, ExpansionPanelSummary, Typography, ExpansionPanelDetails, CardHeader, IconButton } from '@material-ui/core';
+import { Card, CardContent, ExpansionPanel, Grid, TextField, Table, TableHead, TableRow, TableBody, Button, TableCell, ExpansionPanelSummary, Typography, ExpansionPanelDetails, CardHeader, IconButton, MenuItem } from '@material-ui/core';
 import QualificationPanel from '../../components/QualificationPanel';
 import MutipleSelectionList from '../../components/MutipleSelectionList';
 import LookupDataService from '../../services/LookupDataService';
@@ -7,6 +7,8 @@ import SingleSelectionList from '../../components/SingleSelectionList';
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
+import ActionButtonSection from '../../components/ActionButtonSection';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const useStyles = makeStyles(theme => ({
 	root: {
@@ -19,7 +21,10 @@ const useStyles = makeStyles(theme => ({
 	label: {
 		marginLeft: theme.spacing(1),
 		marginRight: theme.spacing(1)
-	},
+    },
+    textField:{
+        width:200
+    },
 	button: {
 		margin: theme.spacing(1),
 	},
@@ -29,105 +34,141 @@ const lookupDataService = new LookupDataService();
 const educations = lookupDataService.fetchEducations();
 const skills = lookupDataService.fetchSkills();
 const experience = lookupDataService.fetchExperience();
+const posType = lookupDataService.fetchPositionType();
 
 function FindCandidateHook(props){
 
     const classes = useStyles();
     return(
-        <ExpansionPanel expanded>
-            <ExpansionPanelSummary>
-                <Typography>Find candidates</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-                <Grid container>
-                    <Grid item xs={12}>
-                        <Card>
-                            <CardHeader title="Review Position"/>
-                            <CardContent>
-                                <TextField 
-                                    id="jobTitle"
-                                    value={props.position.jobTitle}
-                                    disabled={true}
-                                />
-                                <TextField 
-                                    id="posType"
-                                    value={props.position.positionType}
-                                    disabled={true}
-                                />
-                            </CardContent>
-                        </Card>
+        <div>
+            <ExpansionPanel expanded={props.expandedPanel === 'p0'} onChange={(e, i) => props.handlePanelExpand(e, i, 'p0')}>
+                <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                >
+                    <Typography>Find candidates</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                    <Grid container>
+                        <Grid item xs={12}>
+                            <Card>
+                                <CardHeader title="Review Position"/>
+                                <CardContent>
+                                    <Grid container>
+                                        <Grid item xs={12}>
+                                            <TextField 
+                                                id="jobTitle"
+                                                label="Job title"
+                                                value={props.position.jobTitle}
+                                                disabled={true}
+                                                className={classes.textField}
+                                            />
+                                            <TextField
+                                                id="posType"
+                                                select
+                                                label="Position Type"
+                                                value={props.position.positionType}
+                                                disabled={true}
+                                                className={classes.textField}
+                                            >
+                                                {posType.map(option => (
+                                                    <MenuItem key={option.value} value={option.value}>
+                                                        {option.label}
+                                                    </MenuItem>
+                                                ))}
+                                            </TextField>
+                                        </Grid>
+                                    </Grid>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <QualificationPanel qualification={props.qualification}
+                                                disabled={true}
+                            />
+                        </Grid>
                     </Grid>
-                    <Grid item xs={12}>
-                        <QualificationPanel qualification={props.qualification}
-                                            disabled={true}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>Name</TableCell>
-                                    <TableCell>Education</TableCell>
-                                    <TableCell>Skill</TableCell>
-                                    <TableCell>Experience</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {
-                                    props.candidates.map((candidate, index) => (
-                                        <TableRow>
-                                            <TableCell>
-                                                <TextField value={candidate.name}
-                                                    onChange={(event) => (props.handleNameChange(event, index))}
-                                                >
+                </ExpansionPanelDetails>
+            </ExpansionPanel>
 
-                                                </TextField>
-                                            </TableCell>
-                                            <TableCell>
-                                                <MutipleSelectionList disabled={false} list={educations} 
-                                                                                        selectedValues={candidate.qualification.educations} 
-                                                                                        handleItemSelect={props.handleEducationSelect}
-                                                                                        otherInputs={[index]}
-                                                                                    />
-                                            </TableCell>
-                                            <TableCell>
-                                                <MutipleSelectionList disabled={false} list={skills} 
-                                                                                        selectedValues={candidate.qualification.skills} 
-                                                                                        handleItemSelect={props.handleSkillSelect}
-                                                                                        otherInputs={[index]}
-                                                                                    />
-                                            </TableCell>
-                                            <TableCell>
-                                                <SingleSelectionList disabled={false} list={experience} 
-                                                                                        selectedValues={candidate.qualification.experience} 
-                                                                                        handleItemSelect={props.handleExperienceSelect}
-                                                                                        otherInputs={[index]}
+            <ExpansionPanel expanded={props.expandedPanel === 'p1'} onChange={(e, i) => props.handlePanelExpand(e, i, 'p1')}>
+                <ExpansionPanelSummary
+                    expandIcon={<ExpandMoreIcon />}
+                >
+                    <Typography>Add candidates</Typography>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                    <Grid container>
+                        <Grid item xs={12}>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Name</TableCell>
+                                        <TableCell>Education</TableCell>
+                                        <TableCell>Skill</TableCell>
+                                        <TableCell>Experience</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {
+                                        props.candidates.map((candidate, index) => (
+                                            <TableRow>
+                                                <TableCell>
+                                                    <TextField value={candidate.name}
+                                                        onChange={(event) => (props.handleNameChange(event, index))}
+                                                    >
+
+                                                    </TextField>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <MutipleSelectionList disabled={false} list={educations} 
+                                                                                            selectedValues={candidate.qualification.educations} 
+                                                                                            handleItemSelect={props.handleEducationSelect}
+                                                                                            otherInputs={[index]}
                                                                                         />
-                                            </TableCell>
-                                            <TableCell>
-                                                <IconButton aria-label="delete" onClick={() => (props.handleDeleteRow(index))}>
-                                                    <DeleteIcon fontSize="small" />
-                                                </IconButton>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))
-                                }
-                            </TableBody>
-                        </Table>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <MutipleSelectionList disabled={false} list={skills} 
+                                                                                            selectedValues={candidate.qualification.skills} 
+                                                                                            handleItemSelect={props.handleSkillSelect}
+                                                                                            otherInputs={[index]}
+                                                                                        />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <SingleSelectionList disabled={false} list={experience} 
+                                                                                            selectedValues={candidate.qualification.experience} 
+                                                                                            handleItemSelect={props.handleExperienceSelect}
+                                                                                            otherInputs={[index]}
+                                                                                            />
+                                                </TableCell>
+                                                <TableCell>
+                                                    <IconButton aria-label="delete" onClick={() => (props.handleDeleteRow(index))}>
+                                                        <DeleteIcon fontSize="small" />
+                                                    </IconButton>
+                                                </TableCell>
+                                            </TableRow>
+                                        ))
+                                    }
+                                </TableBody>
+                            </Table>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Button
+                                variant="contained"
+                                color="primary"
+                                className={classes.button}
+                                onClick={props.handleAddCandidate}
+                                startIcon={<AddIcon></AddIcon>}>
+                                Add candidate
+                            </Button> 
+                        </Grid>
                     </Grid>
-                    <Grid item xs={12}>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            className={classes.button}
-                            onClick={props.handleAddCandidate}
-                            startIcon={<AddIcon></AddIcon>}>
-                            Add candidate
-                        </Button> 
-                    </Grid>
-                </Grid>
-            </ExpansionPanelDetails>
-        </ExpansionPanel>
+                </ExpansionPanelDetails>
+            </ExpansionPanel>
+            <ActionButtonSection 	handleSubmitClick 	=	{props.handleSubmitClick}
+                                    handleSaveClick		=	{props.handleSaveClick}
+                                    handleCancelClick	=	{props.handleCancelClick}
+            />
+        </div>
     );
 }
 
@@ -140,7 +181,8 @@ export default class FindCandidate extends React.Component{
             isLoaded: false,
             candidates: {value: [{name: "", qualification:{educations:[], skills:[], experience:""}}]},
             qualification: {value: {educations:[], skills:[], experience: ""}},
-            position: {value:{jobTitle:"test", posType:"test"}}
+            position: {value:{jobTitle:"test", posType:"test"}},
+            expandedPanel: 'p0'
         }
         this.handleAddCandidate = this.handleAddCandidate.bind(this);
         this.handleEducationSelect = this.handleEducationSelect.bind(this);
@@ -148,6 +190,14 @@ export default class FindCandidate extends React.Component{
         this.handleExperienceSelect = this.handleExperienceSelect.bind(this);
         this.handleDeleteRow = this.handleDeleteRow.bind(this);
         this.handleNameChange = this.handleNameChange.bind(this);
+        this.handlePanelExpand = this.handlePanelExpand.bind(this);
+    }
+
+    handlePanelExpand(event, isExpanded, panel){
+        console.log("panelExpanded:", panel, isExpanded);
+        this.setState({
+            expandedPanel: isExpanded? panel: false
+        })
     }
 
     handleNameChange(event, index){
@@ -219,7 +269,7 @@ export default class FindCandidate extends React.Component{
     componentDidMount(){
         const host = `${window.location.protocol + '//' + window.location.host}`;
 		fetch(`${host}/rest/task/${this.state.taskId}/variables`)
-			.then(res => res.text())
+			.then(res => res.json())
 			.then(
 				(result) => {
 					const position = result.position ? result.position : {value:{ positionType: "", replacement: {} }};
@@ -245,7 +295,6 @@ export default class FindCandidate extends React.Component{
     }
 
     render(){
-        console.log("find candidate: ", this.state.candidates);
         return(
             this.state.isLoaded?
                 <FindCandidateHook  candidates              =   {this.state.candidates.value}
@@ -257,6 +306,8 @@ export default class FindCandidate extends React.Component{
                                     handleExperienceSelect  =   {this.handleExperienceSelect}
                                     handleDeleteRow         =   {this.handleDeleteRow}
                                     handleNameChange        =   {this.handleNameChange}
+                                    handlePanelExpand       =   {this.handlePanelExpand}
+                                    expandedPanel           =   {this.state.expandedPanel}
                 />:<div>Loading...</div>
         )
     }
