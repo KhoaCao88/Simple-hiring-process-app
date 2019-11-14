@@ -243,7 +243,7 @@
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>1.6.0</version>
 				<configuration>
-					<mainClass>Camunda_demo.Simple_hiring_process_app.CamundaApplication</mainClass>
+					<mainClass>org.dkit.camunda.simple_hiring_process_app.CamundaApplication</mainClass>
 				</configuration>
 			</plugin>
 		</plugins>

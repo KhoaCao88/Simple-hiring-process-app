@@ -41,11 +41,11 @@
         <camunda:formData>
           <camunda:formField id="empNum" type="long">
             <camunda:validation>
-              <camunda:constraint name="validator" config="Camunda_demo.Simple_hiring_process_app.services.SubmitApplicationValidator" />
+              <camunda:constraint name="validator" config="org.dkit.camunda.simple_hiring_process_app.services.SubmitApplicationValidator" />
             </camunda:validation>
           </camunda:formField>
         </camunda:formData>
-        <camunda:taskListener class="Camunda_demo.Simple_hiring_process_app.services.SubmitApplicationAssignmentListener" event="assignment" />
+        <camunda:taskListener class="org.dkit.camunda.simple_hiring_process_app.services.SubmitApplicationAssignmentListener" event="assignment" />
         <camunda:inputOutput>
           <camunda:inputParameter name="referenceNo">${referenceNo}</camunda:inputParameter>
           <camunda:outputParameter name="isNew">${position.positionType}</camunda:outputParameter>
@@ -65,7 +65,7 @@
     </bpmn:userTask>
     <bpmn:startEvent id="StartEvent_19ovyws" name="Start">
       <bpmn:extensionElements>
-        <camunda:executionListener class="Camunda_demo.Simple_hiring_process_app.services.StartProcessListener" event="start" />
+        <camunda:executionListener class="org.dkit.camunda.simple_hiring_process_app.services.StartProcessListener" event="start" />
       </bpmn:extensionElements>
       <bpmn:outgoing>SequenceFlow_13r91mo</bpmn:outgoing>
     </bpmn:startEvent>
@@ -86,11 +86,11 @@
     <bpmn:endEvent id="EndEvent_0au9kto">
       <bpmn:incoming>SequenceFlow_1wl4pu7</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:serviceTask id="send-escalation-notice" name="Send escalation notice" camunda:class="Camunda_demo.Simple_hiring_process_app.services.SendEscalationNotice">
+    <bpmn:serviceTask id="send-escalation-notice" name="Send escalation notice" camunda:class="org.dkit.camunda.simple_hiring_process_app.services.SendEscalationNotice">
       <bpmn:incoming>SequenceFlow_00j4u41</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_1wl4pu7</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="notifying-hiring-manager" name="Notifying Hiring Manager" camunda:class="Camunda_demo.Simple_hiring_process_app.services.NotifyingHiringManager">
+    <bpmn:serviceTask id="notifying-hiring-manager" name="Notifying Hiring Manager" camunda:class="org.dkit.camunda.simple_hiring_process_app.services.NotifyingHiringManager">
       <bpmn:incoming>SequenceFlow_1byh8t6</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0lxjd12</bpmn:outgoing>
     </bpmn:serviceTask>
