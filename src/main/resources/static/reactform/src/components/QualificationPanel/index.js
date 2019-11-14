@@ -29,13 +29,22 @@ function TabPanel(props) {
 }
 
 const lookupDataService = new LookupDataService();
-const educations = lookupDataService.fetchEducations();
-const skills = lookupDataService.fetchSkills();
-const experience = lookupDataService.fetchExperience();
+let isLoaded = false;
 
 export default function QualificationPanel(props) {
     const [value, setValue] = React.useState(2);
+    const [educations, setEducations] = React.useState([]);
+    const [skills, setSkills] = React.useState([]);
+    const [experience, setExperience] = React.useState([]);
     const classes = useStyles();
+    if(!isLoaded){
+        lookupDataService.fetchEducations(setEducations);
+        lookupDataService.fetchSkills(setSkills);
+        lookupDataService.fetchExperience(setExperience);
+        isLoaded = true;
+    }
+
+    
 
     console.log("QualificationPanel props:", props);
 

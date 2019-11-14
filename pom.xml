@@ -3,8 +3,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>Camunda-demo</groupId>
-	<artifactId>Simple-hiring-process-app</artifactId>
+	<groupId>org.dkit.camunda</groupId>
+	<artifactId>simple-hiring-process-app</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<name>Simple-hiring-process-app</name>
@@ -54,7 +54,20 @@
 			<artifactId>groovy-all</artifactId>
 			<version>2.5.8</version>
 			<type>pom</type>
-	</dependency>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
+			<version>${springBoot.version}</version>
+		</dependency>
+
+		<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+			<version>${springBoot.version}</version>
+        </dependency>
+
 		<dependency>
 			<groupId>org.camunda.bpm.springboot</groupId>
 			<artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>

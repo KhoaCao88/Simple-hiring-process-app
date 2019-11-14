@@ -9,7 +9,7 @@ import ExistingPositionPanel from '../ExistingPositionPanel';
 
 const lookupDataService = new LookupDataService();
 const posType = lookupDataService.fetchPositionType();
-const locations = lookupDataService.fetchLocation();
+let isLoaded = false;
 
 const useStyles = makeStyles(theme => ({
     menu: {
@@ -30,7 +30,12 @@ const useStyles = makeStyles(theme => ({
 export default function PositionPanel(props) {
 
     const classes = useStyles();
-    
+    const [locations, setLocations] = React.useState([]);
+
+    if(!isLoaded){
+        lookupDataService.fetchLocation(setLocations);
+        isLoaded = true;
+    }
     return (
         <Card className={classes.section}>
             <CardHeader title='Position Details' />

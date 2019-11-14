@@ -4,10 +4,8 @@ import { Card, CardHeader, CardContent, TextField, MenuItem } from '@material-ui
 import LookupDataService from '../../services/LookupDataService';
 
 const lookupDataService = new LookupDataService();
-
 const empTypes = lookupDataService.fetchEmploymentType();
-
-const departments = lookupDataService.fetchDepartment();
+let isLoaded = false;
 
 const useStyles = makeStyles(theme => ({
     menu: {
@@ -27,7 +25,12 @@ const useStyles = makeStyles(theme => ({
 
 export default function RequesterPanel(props) {
 
+    const [departments, setDepartments] = React.useState([]);
     const classes = useStyles();
+    if(!isLoaded){
+        lookupDataService.fetchDepartment(setDepartments);
+        isLoaded = true;
+    }
 
     return (
         <Card className={classes.section}>
