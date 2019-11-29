@@ -20,3 +20,7 @@ mvn spring-boot:run
 #### http://localhost:8080/
 #### username: demo
 #### password: demo
+
+## process explaination
+
+#### https://www.ibm.com/support/knowledgecenter/en/SSFPJS_8.5.0/com.ibm.wbpm.main.doc/tutorial/topics/introduction_gs-tutorials_shipped.html
