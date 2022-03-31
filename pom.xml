@@ -15,7 +15,7 @@
 		<!-- Adjust if you want to use Camunda Enterprise Edition (EE): <camunda.version>7.11.0-ee</camunda.version> 
 			Make sure you also switch to the ee webapp dependency and EE repository below -->
 		<camundaSpringBoot.version>3.3.1</camundaSpringBoot.version>
-		<springBoot.version>2.1.5.RELEASE</springBoot.version>
+		<springBoot.version>2.5.12</springBoot.version>
 
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
