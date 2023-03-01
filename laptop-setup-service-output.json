@@ -1,9 +1,0 @@
-[
-  {
-    "operation": "shift",
-    "spec": {
-      "id": "id",
-      "status": "status"
-    }
-  }
-]
