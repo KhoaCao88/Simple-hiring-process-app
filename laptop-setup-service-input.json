@@ -1,0 +1,22 @@
+[
+  {
+    "operation": "modify-default-beta",
+    "spec": {
+      "laptop": {
+        "description": "=concat(@(1,model),',', @(1,cpu),',', @(1,memory),',', @(1,storage))"
+      }
+    }
+  },
+  {
+    "operation": "shift",
+    "spec": {
+      "requester": {
+        "id": "userId"
+      },
+      "laptop": {
+        "model": "model",
+        "description": "description"
+      }
+    }
+  }
+]
